@@ -31,6 +31,7 @@ jobs:
           VITE_AZURE_TENANT_ID: ${{ secrets.VITE_AZURE_TENANT_ID }}
           VITE_AZURE_AUTHORITY: ${{ secrets.VITE_AZURE_AUTHORITY }}
           VITE_GRAPH_BASE_URL: ${{ vars.VITE_GRAPH_BASE_URL }}
+          CUSTOM_BUILD_COMMAND: "npm install --legacy-peer-deps && npm run build"
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_BRAVE_STONE_0CB7F1B00 }}
           repo_token: ${{ secrets.GITHUB_TOKEN }} # Used for Github integrations (i.e. PR comments)
@@ -41,7 +42,7 @@ jobs:
           app_location: "/" # App source code path
           api_location: "api" # Api source code path - optional
           output_location: "dist" # Built app content directory - optional
-          app_build_command: "npm install --legacy-peer-deps && npm run build"
+          # app_build_command: "npm install --legacy-peer-deps && npm run build" # 注释掉
           ###### End of Repository/Build Configurations ######
 
   close_pull_request_job:
