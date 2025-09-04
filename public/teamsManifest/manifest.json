@@ -1,0 +1,42 @@
+{
+  "$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.22/MicrosoftTeams.schema.json",
+  "version": "1.0.0",
+  "manifestVersion": "1.22",
+  "id": "ad03ecfb-6bb4-40f7-9b10-9afa1b2a8d5a",
+  "name": { "short": "tab-auth-demo" },
+  "developer": {
+    "name": "EY",
+    "websiteUrl": "https://www.ey.com",
+    "privacyUrl": "https://www.ey.com",
+    "termsOfUseUrl": "https://www.ey.com"
+  },
+  "description": {
+    "short": "A tab app demos authentication in Teams",
+    "full": "The app support NAA and SSO if NAA not available"
+  },
+  "icons": { "outline": "outline.png", "color": "color.png" },
+  "accentColor": "#ffffff",
+  "staticTabs": [
+    {
+      "entityId": "b5fb843e-0d89-4da5-8a8d-261aacded518",
+      "name": "Teams App Demo",
+      "contentUrl": "https://potential-space-fortnight-r4vv76p7gqqfpjp-5173.app.github.dev/",
+      "websiteUrl": "https://potential-space-fortnight-r4vv76p7gqqfpjp-5173.app.github.dev/",
+      "scopes": ["personal"]
+    }
+  ],
+  "validDomains": [
+    "potential-space-fortnight-r4vv76p7gqqfpjp-5173.app.github.dev"
+  ],
+  "webApplicationInfo": {
+    "id": "eb8698e7-9676-40e7-b610-b01028f08a4f",
+    "resource": "https://example",
+    "nestedAppAuthInfo": [
+      {
+        "redirectUri": "brk-multihub://potential-space-fortnight-r4vv76p7gqqfpjp-5173.app.github.dev",
+        "scopes": ["User.Read"],
+        "claims": "{\"access_token\":{\"xms_cc\":{\"values\":[\"CP1\"]}}}"
+      }
+    ]
+  }
+}
