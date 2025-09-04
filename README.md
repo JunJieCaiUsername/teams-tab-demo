@@ -34,8 +34,6 @@ cd tab-auth-demo
 # 安装依赖 (必须使用 --legacy-peer-deps 参数)
 npm install --legacy-peer-deps
 
-# 可选：配置代码格式化工具
-npm install --save-dev eslint prettier
 ```
 
 **注意**: 必须使用 `--legacy-peer-deps` 参数安装依赖，这是因为 FluentUI 的依赖的版本冲突需要这种方式解决。
@@ -54,9 +52,9 @@ npm install --save-dev eslint prettier
 
 #### 3.2 创建环境配置文件
 
-在项目根目录创建 `.env` 文件：
+在项目根目录创建 `.env.development.local` , 参考`.env.example`文件填写：
 
-```env
+```.env.example
 # Azure AD 应用配置
 VITE_AZURE_CLIENT_ID=your-client-id
 VITE_AZURE_TENANT_ID=your-tenant-id
@@ -69,6 +67,8 @@ VITE_GRAPH_BASE_URL=https://graph.microsoft.com
 # VITE_GRAPH_BASE_URL=https://microsoftgraph.chinacloudapi.cn
 ```
 
+> 更多可见 [Vite env guide](https://vite.dev/guide/env-and-mode.html)
+
 ### 4. 启动开发服务器
 
 ```bash
@@ -77,7 +77,7 @@ npm run dev
 
 > 关于 Vite
 >
-> 本项目基于 [Vite](https://vitejs.dev/) 构建，Vite 是现代前端开发工具，只需保存代码，页面会自动实时刷新，无需手动重启服务，大幅提升开发效率。
+> 本项目基于 [Vite](https://vite.dev/) 构建，Vite 是现代前端开发工具，只需保存代码，页面会自动实时刷新，无需手动重启服务，大幅提升开发效率。
 
 应用将一般在 `http://localhost:5173` 启动。
 
@@ -171,6 +171,10 @@ Teams App Manifest 是定义 App 在 Teams 中的配置文件，比如你的 app
 - `resource`: 用于传统 Teams SSO，如果不使用，填一个 dummy 字符串，参见 [webApplicationInfo](https://learn.microsoft.com/en-us/microsoftteams/platform/resources/schema/manifest-schema#webapplicationinfo)
 
 更多 NAA 配置详情，请参考：[Teams NAA 令牌预取文档](https://learn.microsoft.com/en-us/microsoftteams/platform/concepts/authentication/nested-authentication#token-prefetching-for-nested-app-authentication-naa)
+
+## Azure Static Web Apps 部署与 GitHub Actions 集成指南
+
+[👉 部署与集成详细指南](./DeployToAzureSWA.md)
 
 ## 项目结构说明
 
