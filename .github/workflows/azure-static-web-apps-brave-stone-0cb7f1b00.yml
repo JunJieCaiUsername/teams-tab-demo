@@ -16,7 +16,7 @@ jobs:
     name: Build and Deploy Job
     strategy:
       matrix:
-        environment: [production-china, development-commercial]
+        environment: [dev-china, dev-commercial]
     environment: ${{ matrix.environment }}
     steps:
       - uses: actions/checkout@v3
