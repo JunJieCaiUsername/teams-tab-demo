@@ -40,6 +40,7 @@ const useStyles = makeStyles({
     minHeight: "100vh",
     overflow: "hidden",
     position: "relative",
+    backgroundColor: tokens.colorNeutralBackground2,
   },
   mainContentContainer: {
     flex: 1,

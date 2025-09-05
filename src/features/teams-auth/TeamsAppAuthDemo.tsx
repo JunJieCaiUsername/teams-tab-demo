@@ -15,8 +15,6 @@ const useStyles = makeStyles({
   mainContent: {
     flex: 1,
     padding: tokens.spacingVerticalXXL,
-    maxWidth: "800px",
-    margin: "0 auto",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
