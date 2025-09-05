@@ -7,8 +7,17 @@ import {
   Card,
   CardHeader,
   Body2,
-  Body1,
 } from "@fluentui/react-components";
+import { ArrowRightFilled, GlobeShieldColor } from "@fluentui/react-icons";
+import { useNavigate } from "react-router-dom";
+
+// Define the type for demo cards
+interface DemoCard {
+  title: string;
+  description: string;
+  content: string;
+  route: string;
+}
 
 const useStyles = makeStyles({
   container: {
@@ -26,10 +35,21 @@ const useStyles = makeStyles({
   cardGrid: {
     display: "grid",
     gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-    gap: tokens.spacingHorizontalL,
+    gap: tokens.spacingHorizontalS,
   },
   card: {
     padding: tokens.spacingVerticalL,
+    maxWidth: "300px",
+    cursor: "pointer",
+    transition: `box-shadow ${tokens.durationNormal} ${tokens.curveEasyEase}, transform ${tokens.durationNormal} ${tokens.curveEasyEase}`,
+    "&:hover": {
+      boxShadow: tokens.shadow8,
+      transform: "translateY(-1px)",
+    },
+    "&:active": {
+      transform: "translateY(0px)",
+      boxShadow: tokens.shadow4,
+    },
   },
   cardHeader: {
     paddingBottom: tokens.spacingVerticalS,
@@ -38,6 +58,37 @@ const useStyles = makeStyles({
 
 const Homepage = () => {
   const styles = useStyles();
+  const navigate = useNavigate();
+
+  // Define demo cards data
+  const demoCards: DemoCard[] = [
+    {
+      title: "Authentication",
+      description: "Implementation guide for NAA",
+      content:
+        "A demo demonstrates how to convert a regular Azure AD protected application to support both web browsers and Teams environments, providing a unified authentication experience.",
+      route: "/auth-demo",
+    },
+    {
+      title: "TeamsJS",
+      description: "Implementation guide for NAA",
+      content:
+        "A demo demonstrates how to convert a regular Azure AD protected application to support both web browsers and Teams environments, providing a unified authentication experience.A demo demonstrates how to convert a regular Azure AD protected application to support both web browsers and Teams environments, providing a unified authentication experience",
+      route: "/auth-demo",
+    },
+    {
+      title: "TeamsJS",
+      description: "Implementation guide for NAA",
+      content:
+        "A demo demonstrates how to convert a regular Azure AD protected application to support both web browsers and Teams environments, providing a unified authentication experience.",
+      route: "/auth-demo",
+    },
+    // Add more demo cards here in the future
+  ];
+
+  const handleCardClick = (route: string) => {
+    navigate(route);
+  };
 
   return (
     <div className={styles.container}>
@@ -57,21 +108,22 @@ const Homepage = () => {
 
       <Subtitle1 as="h2">Topics</Subtitle1>
       <div className={styles.cardGrid}>
-        <Card className={styles.card}>
-          <CardHeader
-            className={styles.cardHeader}
-            header={<Text weight="semibold">Authentications</Text>}
-            description={
-              <Text size={200}>Embed your web content within Teams.</Text>
-            }
-          />
-
-          <Body1>
-            Tabs are Teams-aware webpages that you can embed in channels, group
-            chats, or as a personal app. They provide a full-screen, interactive
-            experience for your users right inside the Teams client.
-          </Body1>
-        </Card>
+        {demoCards.map((card, index) => (
+          <Card
+            key={index}
+            className={styles.card}
+            onClick={() => handleCardClick(card.route)}
+          >
+            <CardHeader
+              className={styles.cardHeader}
+              header={<Text weight="semibold">{card.title}</Text>}
+              description={<Text size={200}>{card.description}</Text>}
+              image={<GlobeShieldColor fontSize={36} />}
+              action={<ArrowRightFilled />}
+            />
+            <Text size={200}>{card.content}</Text>
+          </Card>
+        ))}
       </div>
     </div>
   );
