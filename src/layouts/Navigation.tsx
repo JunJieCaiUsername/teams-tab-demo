@@ -170,14 +170,14 @@ const Navigation: React.FC<NavigationProps> = ({
 
       <NavDrawerBody>
         <NavItem
-          icon={<HomeRegular />}
+          icon={<HomeRegular fontSize={20} />}
           value="/"
           onClick={() => handleNavItemClick("/")}
         >
           Home
         </NavItem>
         <NavItem
-          icon={<ShieldKeyholeRegular />}
+          icon={<ShieldKeyholeRegular fontSize={20} />}
           value="/auth-demo"
           onClick={() => handleNavItemClick("/auth-demo")}
         >

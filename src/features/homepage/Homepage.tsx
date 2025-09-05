@@ -7,6 +7,7 @@ import {
   Card,
   CardHeader,
   Body2,
+  type CardHeaderSlots,
 } from "@fluentui/react-components";
 import { ArrowRightFilled, GlobeShieldColor } from "@fluentui/react-icons";
 import { useNavigate } from "react-router-dom";
@@ -17,6 +18,7 @@ interface DemoCard {
   description: string;
   content: string;
   route: string;
+  image?: CardHeaderSlots["image"];
 }
 
 const useStyles = makeStyles({
@@ -33,22 +35,26 @@ const useStyles = makeStyles({
     lineHeight: 1.5,
   },
   cardGrid: {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-    gap: tokens.spacingHorizontalS,
+    display: "flex",
+    flexWrap: "wrap",
+    gap: tokens.spacingHorizontalL,
   },
   card: {
     padding: tokens.spacingVerticalL,
-    maxWidth: "300px",
+    width: "320px",
+    height: "200px",
     cursor: "pointer",
-    transition: `box-shadow ${tokens.durationNormal} ${tokens.curveEasyEase}, transform ${tokens.durationNormal} ${tokens.curveEasyEase}`,
+    backgroundColor: tokens.colorNeutralBackground1,
+    transition: `box-shadow ${tokens.durationNormal} ${tokens.curveEasyEase}, transform ${tokens.durationNormal} ${tokens.curveEasyEase}, background-color ${tokens.durationNormal} ${tokens.curveEasyEase}`,
     "&:hover": {
-      boxShadow: tokens.shadow8,
-      transform: "translateY(-1px)",
+      boxShadow: tokens.shadow16,
+      transform: "scale(1.02)",
+      backgroundColor: `${tokens.colorNeutralBackground1} !important`,
     },
     "&:active": {
-      transform: "translateY(0px)",
+      transform: "scale(0.98)",
       boxShadow: tokens.shadow4,
+      backgroundColor: `${tokens.colorNeutralBackground1} !important`,
     },
   },
   cardHeader: {
@@ -68,20 +74,7 @@ const Homepage = () => {
       content:
         "A demo demonstrates how to convert a regular Azure AD protected application to support both web browsers and Teams environments, providing a unified authentication experience.",
       route: "/auth-demo",
-    },
-    {
-      title: "TeamsJS",
-      description: "Implementation guide for NAA",
-      content:
-        "A demo demonstrates how to convert a regular Azure AD protected application to support both web browsers and Teams environments, providing a unified authentication experience.A demo demonstrates how to convert a regular Azure AD protected application to support both web browsers and Teams environments, providing a unified authentication experience",
-      route: "/auth-demo",
-    },
-    {
-      title: "TeamsJS",
-      description: "Implementation guide for NAA",
-      content:
-        "A demo demonstrates how to convert a regular Azure AD protected application to support both web browsers and Teams environments, providing a unified authentication experience.",
-      route: "/auth-demo",
+      image: <GlobeShieldColor fontSize={36} />,
     },
     // Add more demo cards here in the future
   ];
@@ -101,9 +94,8 @@ const Homepage = () => {
         environment in China.
       </Body2>
       <Body2 className={styles.paragraph}>
-        Please select one of the demo scenarios from the navigation bar on the
-        left to get started. Each demo is designed to showcase a specific topic
-        of the Teams Tab.
+        Please select one of the demo scenarios to get started. Each demo is
+        designed to showcase a specific topic of the Teams Tab.
       </Body2>
 
       <Subtitle1 as="h2">Topics</Subtitle1>
@@ -111,6 +103,8 @@ const Homepage = () => {
         {demoCards.map((card, index) => (
           <Card
             key={index}
+            appearance="filled"
+            size="large"
             className={styles.card}
             onClick={() => handleCardClick(card.route)}
           >
@@ -118,7 +112,7 @@ const Homepage = () => {
               className={styles.cardHeader}
               header={<Text weight="semibold">{card.title}</Text>}
               description={<Text size={200}>{card.description}</Text>}
-              image={<GlobeShieldColor fontSize={36} />}
+              image={card.image}
               action={<ArrowRightFilled />}
             />
             <Text size={200}>{card.content}</Text>
