@@ -100,7 +100,7 @@ export async function acquireToken(
     const accounts = instance.getAllAccounts();
 
     // provide the account if there is only one, prompt for selection if more than 1
-    // if there is no account, catch the error and acquireToken interactively.
+    // if there is no account, try acquireTokenSilent anyway and then catch the error to acquire token interactively.
     // refer to https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/6d975bcac88832b21e8e1ac030d3802133640005/lib/msal-browser/docs/initialization.md
     if (accounts.length > 0) {
       if (accounts.length > 1) {

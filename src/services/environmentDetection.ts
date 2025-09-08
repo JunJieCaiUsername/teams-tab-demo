@@ -82,7 +82,9 @@ async function detectEnvironmentType(): Promise<EnvironmentType> {
     const context = await app.getContext();
     console.log("Retrieved context:", context);
 
-    // Check if we can get Teams context
+    // Check if we can get Teams context, note that Teams apps with latest frameworks are available across
+    // multiple host apps (Teams, Outlook, Office).
+    // Refer to https://learn.microsoft.com/en-us/microsoftteams/platform/m365-apps/overview
     if (
       context &&
       context.app?.host?.name &&
@@ -112,7 +114,7 @@ async function detectEnvironmentType(): Promise<EnvironmentType> {
     // Not in Teams environment
     return Environment.WEB;
   } catch (error) {
-    // Failed to get Teams context
+    // If detection fails, fallback to web environment
     console.log("Failed to get Teams context:", error);
     return Environment.WEB;
   }
