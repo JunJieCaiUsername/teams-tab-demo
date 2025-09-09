@@ -7,6 +7,7 @@ import {
   Title1,
 } from "@fluentui/react-components";
 import ProfileData from "./ProfileData";
+import NAAIntroduction from "./NAAIntroduction";
 import type { UserInfo } from "../../types/UserInfo";
 import { acquireToken } from "../../services/authService";
 import { getUserInfo, getUserInfoScopes } from "../../services/graph";
@@ -14,13 +15,12 @@ import { getUserInfo, getUserInfoScopes } from "../../services/graph";
 const useStyles = makeStyles({
   mainContent: {
     flex: 1,
-    padding: tokens.spacingVerticalXXL,
     display: "flex",
     flexDirection: "column",
-    alignItems: "center",
+    alignItems: "left",
   },
   title: {
-    textAlign: "center",
+    textAlign: "left",
     marginBottom: tokens.spacingVerticalXXL,
   },
   loading: {
@@ -65,8 +65,11 @@ const TeamsAppAuthDemo: React.FC = () => {
   }, []);
 
   return (
-    <>
-      <Title1 className={styles.title}>Teams App Authentication Demo</Title1>
+    <div className={styles.mainContent}>
+      <Title1 className={styles.title}>Teams Tab Authentication Demo</Title1>
+
+      <NAAIntroduction />
+
       {loading ? (
         <div className={styles.loading}>
           <Spinner size="large" />
@@ -80,7 +83,7 @@ const TeamsAppAuthDemo: React.FC = () => {
           </div>
         )
       )}
-    </>
+    </div>
   );
 };
 

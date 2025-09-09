@@ -27,6 +27,7 @@ import { getUserInfoScopes } from "./services/graph";
 import {
   getEnvironmentType,
   Environment,
+  type EnvironmentType,
 } from "./services/environmentDetection";
 
 const Homepage = React.lazy(() => import("./features/homepage/Homepage"));
@@ -139,7 +140,9 @@ function MainContent({
   const styles = useStyles();
   const { inProgress } = useMsal(); // MSAL hooks
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [environment, setEnvironment] = useState<string>(Environment.UNKNOWN);
+  const [environment, setEnvironment] = useState<EnvironmentType>(
+    Environment.UNKNOWN
+  );
   const [accessToken, setAccessToken] = useState<string | undefined>(undefined);
   const [authError, setAuthError] = useState<string | null>(null);
 

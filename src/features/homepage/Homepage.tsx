@@ -29,7 +29,7 @@ const useStyles = makeStyles({
     textAlign: "left",
   },
   title: {
-    textAlign: "center",
+    textAlign: "left",
   },
   paragraph: {
     lineHeight: 1.5,
