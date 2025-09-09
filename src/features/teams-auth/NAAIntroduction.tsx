@@ -12,8 +12,15 @@ import {
   Badge,
   Link,
   CardHeader,
+  mergeClasses,
+  Subtitle1,
+  Body2,
 } from "@fluentui/react-components";
-import { ChevronRightRegular } from "@fluentui/react-icons";
+import {
+  CheckmarkCircleColor,
+  ChevronRightRegular,
+  DismissCircleColor,
+} from "@fluentui/react-icons";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
 
@@ -22,17 +29,14 @@ const useStyles = makeStyles({
     display: "flex",
     flexDirection: "column",
     marginBottom: tokens.spacingVerticalXXL,
+    lineHeight: 1.7,
+  },
+  paragraph: {
+    lineHeight: 1.7,
   },
   title: {
     textAlign: "left",
     marginBottom: tokens.spacingVerticalL,
-  },
-  paragraph: {
-    lineHeight: 1.5,
-  },
-  introCard: {
-    marginBottom: tokens.spacingVerticalL,
-    background: tokens.colorNeutralBackground2,
   },
   stepCard: {
     marginBottom: tokens.spacingVerticalM,
@@ -62,15 +66,14 @@ const useStyles = makeStyles({
   comparison: {
     display: "flex",
     gap: tokens.spacingHorizontalL,
-    marginBottom: tokens.spacingVerticalL,
-    marginTop: tokens.spacingVerticalM,
+    marginBottom: tokens.spacingVerticalXXL,
   },
   comparisonCard: {
     flex: 1,
+    padding: `${tokens.spacingVerticalL} ${tokens.spacingHorizontalXXL}`,
   },
   oldWay: {
     backgroundColor: tokens.colorPaletteRedBackground1,
-    border: `1px solid ${tokens.colorPaletteRedBorder2}`,
   },
   newWay: {
     backgroundColor: tokens.colorPaletteGreenBackground1,
@@ -89,6 +92,11 @@ const useStyles = makeStyles({
     borderRadius: tokens.borderRadiusMedium,
     padding: tokens.spacingVerticalM,
     marginTop: tokens.spacingVerticalM,
+  },
+  noIndentList: {
+    margin: 0,
+    padding: 0,
+    listStylePosition: "inside", // 可选，保持圆点在内容内侧
   },
 });
 
@@ -172,7 +180,7 @@ export async function initializeTeamsSDK(): Promise<void> {
   const instance = getMSALInstance();
 
   try {
-    // 第一步：总是先尝试静默获取令牌
+    // 第一步：总是先尝试静默获取Token
     const silentRequest: SilentRequest = {
       scopes,
       redirectUri: getRedirectUri(),
@@ -246,64 +254,71 @@ export async function initializeTeamsSDK(): Promise<void> {
 
   return (
     <div className={styles.container}>
-      <Title3 as="h3" className={styles.title}>
-        将普通 AAD 网站改造为支持 Teams NAA 的应用
-      </Title3>
-      <div className={styles.introCard}>
-        <div className={styles.comparison}>
-          <Card
-            className={`${styles.comparisonCard} ${styles.oldWay}`}
-            appearance="outline"
-          >
-            <CardHeader header={<Title3 as="h3">传统 OBO 模式 ❌</Title3>} />
-            <ul>
-              <li>需要后端服务器进行令牌交换</li>
-              <li>复杂的架构和部署</li>
-              <li>需要预授权宿主应用</li>
-              <li>可能需要多次用户交互</li>
-              <li>更高的开发和维护成本</li>
-            </ul>
-          </Card>
-
-          <Card
-            className={`${styles.comparisonCard} ${styles.newWay}`}
-            appearance="outline"
-          >
-            <Title3>NAA 模式 ✅</Title3>
-            <Text>
-              <br />
-              • 纯前端实现，无需后端
-              <br />
-              • 简化的架构和部署
-              <br />
-              • 支持动态权限请求
-              <br />
-              • 真正的无缝 SSO 体验
-              <br />• 显著降低开发复杂度
-            </Text>
-          </Card>
-        </div>
-
-        <Text>
-          <strong>为什么选择 NAA?</strong>
-          <br />
-          NAA (Nested App Authentication) 是 Microsoft 专为 Teams、Outlook
-          等宿主环境设计的新一代身份验证协议。 它通过让 Teams
-          充当认证代理，直接为嵌套应用获取访问令牌，从而简化了架构并提升了用户体验。
-          相比传统的 On-Behalf-Of 流程，NAA
-          消除了中间层服务器的需求，支持令牌预取，并提供更好的性能和安全性。
-        </Text>
-
-        <div className={styles.importantNote}>
-          <Text weight="semibold">💡 关键优势</Text>
-          <Text>
-            • <strong>架构简化</strong>: 无需编写后端 API 进行令牌交换
-            <br />• <strong>性能优化</strong>: 支持令牌预取，减少首次认证延迟
-            <br />• <strong>用户体验</strong>: 真正的单点登录，无需重复认证
-            <br />• <strong>安全增强</strong>: 减少令牌传输环节，降低安全风险
-          </Text>
-        </div>
+      <div className={styles.comparison}>
+        <Card
+          className={mergeClasses(styles.comparisonCard, styles.newWay)}
+          appearance="filled"
+          size="large"
+        >
+          <CardHeader
+            header={<Subtitle1>NAA 模式</Subtitle1>}
+            image={<CheckmarkCircleColor fontSize={36} />}
+          />
+          <ul className={styles.noIndentList}>
+            <li>
+              <Body2>可纯前端实现，无需后端服务</Body2>
+            </li>
+            <li>
+              <Body2>简化的架构和部署</Body2>
+            </li>
+            <li>
+              <Body2>支持动态权限请求</Body2>
+            </li>
+            <li>
+              <Body2>真正的无缝 SSO 体验</Body2>
+            </li>
+            <li>
+              <Body2>显著降低开发复杂度</Body2>
+            </li>
+          </ul>
+        </Card>
+        <Card
+          className={mergeClasses(styles.oldWay, styles.comparisonCard)}
+          appearance="filled"
+          size="large"
+        >
+          <CardHeader
+            header={<Subtitle1>传统 OBO 模式</Subtitle1>}
+            image={<DismissCircleColor fontSize={36} />}
+          />
+          <ul className={styles.noIndentList}>
+            <li>
+              <Body2>需要写后端服务进行Token交换</Body2>
+            </li>
+            <li>
+              <Body2>复杂的架构和部署</Body2>
+            </li>
+            <li>
+              <Body2>需要预授权宿主应用</Body2>
+            </li>
+            <li>
+              <Body2>可能需要多次用户交互</Body2>
+            </li>
+            <li>
+              <Body2>更高的开发和维护成本</Body2>
+            </li>
+          </ul>
+        </Card>
       </div>
+
+      <Subtitle1>为什么推荐 NAA?</Subtitle1>
+      <Body2 as="p" className={styles.paragraph}>
+        NAA (Nested App Authentication) 是 Microsoft 专为 Teams、Outlook
+        等宿主环境设计的新一代身份验证协议。 它通过让 Teams
+        充当认证代理，直接为嵌套应用获取访问Token，从而简化了架构并提升了用户体验。
+        相比传统的 On-Behalf-Of 流程，NAA
+        消除了中间层服务器的需求，支持Token预取，并提供更好的性能和安全性。
+      </Body2>
 
       <Accordion multiple collapsible>
         {/* Step 1 */}
@@ -337,7 +352,7 @@ export async function initializeTeamsSDK(): Promise<void> {
                 <strong>Teams 应用清单配置：</strong>
                 <br />在 Teams 应用清单中添加{" "}
                 <span className={styles.highlight}>nestedAppAuthInfo</span>{" "}
-                部分， 启用令牌预取功能以提升性能：
+                部分， 启用Token预取功能以提升性能：
               </Text>
 
               <div className={styles.codeContainer}>
@@ -364,7 +379,7 @@ export async function initializeTeamsSDK(): Promise<void> {
                   必须与 Azure AD 中配置的重定向 URI 一致
                   <br />• <span className={styles.highlight}>scopes</span>{" "}
                   定义应用启动时预取的权限范围
-                  <br />• 令牌预取功能可显著减少首次认证延迟
+                  <br />• Token预取功能可显著减少首次认证延迟
                 </Text>
               </div>
 
@@ -374,7 +389,7 @@ export async function initializeTeamsSDK(): Promise<void> {
                   href="https://learn.microsoft.com/en-us/microsoftteams/platform/concepts/authentication/nested-authentication#token-prefetching-for-nested-app-authentication-naa"
                   target="_blank"
                 >
-                  Teams NAA 令牌预取文档
+                  Teams NAA Token预取文档
                 </Link>
               </Text>
             </Card>
@@ -460,7 +475,7 @@ export async function initializeTeamsSDK(): Promise<void> {
           <AccordionHeader expandIcon={<ChevronRightRegular />}>
             <div className={styles.stepHeader}>
               <div className={styles.stepNumber}>3</div>
-              <Title3>基于环境创建 MSAL 客户端和令牌获取</Title3>
+              <Title3>基于环境创建 MSAL 客户端和Token获取</Title3>
             </div>
           </AccordionHeader>
           <AccordionPanel>
@@ -488,7 +503,7 @@ export async function initializeTeamsSDK(): Promise<void> {
               </div>
 
               <Text>
-                <strong>令牌获取策略：</strong>
+                <strong>Token获取策略：</strong>
                 <br />
                 遵循 MSAL.js
                 最佳实践，始终先尝试静默获取，失败后根据环境选择合适的交互式方法：
@@ -525,7 +540,7 @@ export async function initializeTeamsSDK(): Promise<void> {
                   href="https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-browser/docs/acquire-token.md"
                   target="_blank"
                 >
-                  MSAL.js 令牌获取文档
+                  MSAL.js Token获取文档
                 </Link>
               </Text>
             </Card>

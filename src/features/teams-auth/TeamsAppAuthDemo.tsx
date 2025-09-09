@@ -4,7 +4,7 @@ import {
   makeStyles,
   tokens,
   Spinner,
-  Title1,
+  LargeTitle,
 } from "@fluentui/react-components";
 import ProfileData from "./ProfileData";
 import NAAIntroduction from "./NAAIntroduction";
@@ -66,7 +66,9 @@ const TeamsAppAuthDemo: React.FC = () => {
 
   return (
     <div className={styles.mainContent}>
-      <Title1 className={styles.title}>Teams Tab Authentication Demo</Title1>
+      <LargeTitle as="h1" className={styles.title}>
+        为普通 AAD 网站启用 Teams NAA
+      </LargeTitle>
 
       <NAAIntroduction />
 

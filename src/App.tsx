@@ -65,6 +65,7 @@ const useStyles = makeStyles({
     // When space is less than 800px, content will squeeze to fit
     // margin: 0 auto centers the content, so on medium screens it looks both pushed and squeezed
     padding: tokens.spacingVerticalXXL,
+    paddingLeft: tokens.spacingHorizontalXXXL,
     maxWidth: "800px",
     margin: "0 auto",
     display: "flex",
