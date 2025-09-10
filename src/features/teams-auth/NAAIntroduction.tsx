@@ -44,7 +44,6 @@ const useStyles = makeStyles({
     backgroundColor: tokens.colorNeutralBackground2,
   },
   codeContainer: {
-    marginTop: tokens.spacingVerticalM,
     marginBottom: tokens.spacingVerticalM,
   },
   stepHeader: {
@@ -75,8 +74,12 @@ const useStyles = makeStyles({
     borderRadius: tokens.borderRadiusSmall,
     fontFamily: tokens.fontFamilyMonospace,
     fontSize: tokens.fontSizeBase200,
+    margin: `0 ${tokens.spacingHorizontalXS}`,
   },
   importantNote: {
+    display: "flex",
+    flexDirection: "column",
+    gap: tokens.spacingVerticalS,
     backgroundColor: tokens.colorPaletteYellowBackground1,
     border: `1px solid ${tokens.colorPaletteYellowBorder2}`,
     borderRadius: tokens.borderRadiusMedium,
@@ -313,7 +316,9 @@ export async function initializeTeamsSDK(): Promise<void> {
           </ul>
         </Card>
       </div>
+
       <Subtitle1 as="h3">简要步骤</Subtitle1>
+      {/* Accordions */}
       <Accordion multiple collapsible className={styles.accordionHeader}>
         {/* Step 1 */}
         <AccordionItem value="step1">
@@ -324,7 +329,8 @@ export async function initializeTeamsSDK(): Promise<void> {
             <Card className={styles.stepCard}>
               <Body1Strong>Azure AD 应用注册配置：</Body1Strong>
               <Body1>
-                在你的 Azure AD 应用注册中，需要添加 NAA 专用的重定向 URI：
+                在你的 Azure AD 应用注册中，需要添加 NAA
+                专用的重定向域名（只要域名）：
               </Body1>
               <Body1 className={styles.highlight}>
                 brk-multihub://&lt;your-domain&gt;
@@ -334,50 +340,61 @@ export async function initializeTeamsSDK(): Promise<void> {
                 brk-multihub://your-app.ngrok.io
               </Body1>
 
-              <Text>
-                <strong>Teams 应用清单配置：</strong>
-                <br />在 Teams 应用清单中添加{" "}
-                <span className={styles.highlight}>nestedAppAuthInfo</span>{" "}
-                部分， 启用Token预取功能以提升性能：
-              </Text>
+              <Body1Strong>Teams 应用清单配置：</Body1Strong>
 
               <div className={styles.codeContainer}>
+                <Body1>
+                  在 Teams 应用清单中添加
+                  <Body1 className={styles.highlight}>nestedAppAuthInfo</Body1>
+                  部分， 启用Token预取功能以提升性能：
+                </Body1>
                 <SyntaxHighlighter
                   language="json"
                   style={vscDarkPlus}
-                  customStyle={{ borderRadius: "8px" }}
+                  customStyle={{ borderRadius: "6px" }}
                 >
                   {manifestCode}
                 </SyntaxHighlighter>
               </div>
 
               <div className={styles.importantNote}>
-                <Text weight="semibold">⚠️ 重要说明</Text>
-                <Text>
-                  •{" "}
-                  <span className={styles.highlight}>
-                    webApplicationInfo.id
-                  </span>{" "}
-                  必须与你的 Azure AD 应用客户端 ID 完全匹配
-                  <br />• <span className={styles.highlight}>
-                    redirectUri
-                  </span>{" "}
-                  必须与 Azure AD 中配置的重定向 URI 一致
-                  <br />• <span className={styles.highlight}>scopes</span>{" "}
-                  定义应用启动时预取的权限范围
-                  <br />• Token预取功能可显著减少首次认证延迟
-                </Text>
+                <Body1Strong>⚠️ 重要说明</Body1Strong>
+                <ul className={styles.noIndentList}>
+                  <li>
+                    <Body1>
+                      <Body1 className={styles.highlight}>
+                        webApplicationInfo.id
+                      </Body1>
+                      必须与你的 Azure AD 应用客户端 ID 完全匹配
+                    </Body1>
+                  </li>
+                  <li>
+                    <Body1>
+                      <Body1 className={styles.highlight}>redirectUri</Body1>
+                      必须与 Azure AD 中配置的重定向 URI 一致
+                    </Body1>
+                  </li>
+                  <li>
+                    <Body1>
+                      <Body1 className={styles.highlight}>scopes</Body1>
+                      定义应用启动时预取的权限范围
+                    </Body1>
+                  </li>
+                  <li>
+                    <Body1>Token预取功能可显著减少首次认证延迟</Body1>
+                  </li>
+                </ul>
               </div>
 
-              <Text>
-                更多详情请参考:{" "}
+              <Body1>
+                更多详情请参考:
                 <Link
                   href="https://learn.microsoft.com/en-us/microsoftteams/platform/concepts/authentication/nested-authentication#token-prefetching-for-nested-app-authentication-naa"
                   target="_blank"
                 >
                   Teams NAA Token预取文档
                 </Link>
-              </Text>
+              </Body1>
             </Card>
           </AccordionPanel>
         </AccordionItem>
@@ -389,65 +406,68 @@ export async function initializeTeamsSDK(): Promise<void> {
           </AccordionHeader>
           <AccordionPanel>
             <Card className={styles.stepCard}>
-              <Text>
-                <strong>Teams SDK 初始化：</strong>
-                <br />
+              <Body1Strong>Teams SDK 初始化：</Body1Strong>
+              <Body1>
                 必须在 MSAL 初始化之前先初始化 Teams SDK，
                 <Badge appearance="filled" color="important">
                   中国区用户特别注意
-                </Badge>{" "}
+                </Badge>
                 需要添加特定的 validMessageOrigins：
-              </Text>
+              </Body1>
 
               <div className={styles.codeContainer}>
-                <Text size={200}>
-                  来源文件:{" "}
-                  <span className={styles.highlight}>
-                    src/services/teamsSDKService.ts
-                  </span>
-                </Text>
+                <Body1 className={styles.highlight}>
+                  src/services/teamsSDKService.ts
+                </Body1>
+
                 <SyntaxHighlighter
                   language="typescript"
                   style={vscDarkPlus}
-                  customStyle={{ borderRadius: "8px" }}
+                  customStyle={{ borderRadius: "6px" }}
                 >
                   {teamsSDKCode}
                 </SyntaxHighlighter>
               </div>
 
-              <Text>
-                <strong>环境检测逻辑：</strong>
-                <br />
-                通过三步检测确定当前运行环境和 NAA 支持状态：
-              </Text>
+              <Body1Strong>环境检测逻辑：</Body1Strong>
+              <Body1>通过三步检测确定当前运行环境和 NAA 支持状态：</Body1>
 
               <div className={styles.codeContainer}>
-                <Text size={200}>
-                  来源文件:{" "}
-                  <span className={styles.highlight}>
-                    src/services/environmentDetection.ts
-                  </span>
-                </Text>
+                <Body1 className={styles.highlight}>
+                  src/services/environmentDetection.ts
+                </Body1>
+
                 <SyntaxHighlighter
                   language="typescript"
                   style={vscDarkPlus}
-                  customStyle={{ borderRadius: "8px" }}
+                  customStyle={{ borderRadius: "6px" }}
                 >
                   {environmentDetectionCode}
                 </SyntaxHighlighter>
               </div>
 
               <div className={styles.importantNote}>
-                <Text weight="semibold">🔍 检测流程说明</Text>
-                <Text>
-                  <strong>第一步</strong>: 检查 TeamsJS 是否成功初始化 →
-                  失败则为 Web 环境
-                  <br />
-                  <strong>第二步</strong>: 获取上下文验证宿主环境 →
-                  检查是否运行在 Teams 中<br />
-                  <strong>第三步</strong>: 调用 NAA API 检查支持状态 → 确定 NAA
-                  可用性
-                </Text>
+                <Body1Strong>🔍 检测流程说明</Body1Strong>
+                <ul className={styles.noIndentList}>
+                  <li>
+                    <Body1>
+                      <Body1Strong>第一步</Body1Strong>: 检查 TeamsJS
+                      是否成功初始化 → 失败则为 Web 环境
+                    </Body1>
+                  </li>
+                  <li>
+                    <Body1>
+                      <Body1Strong>第二步</Body1Strong>: 获取上下文验证宿主环境
+                      → 检查是否运行在 Teams 中
+                    </Body1>
+                  </li>
+                  <li>
+                    <Body1>
+                      <Body1Strong>第三步</Body1Strong>: 调用 NAA API
+                      检查支持状态 → 确定 NAA 可用性
+                    </Body1>
+                  </li>
+                </ul>
               </div>
             </Card>
           </AccordionPanel>
@@ -460,36 +480,33 @@ export async function initializeTeamsSDK(): Promise<void> {
           </AccordionHeader>
           <AccordionPanel>
             <Card className={styles.stepCard}>
-              <Text>
-                <strong>MSAL 客户端初始化：</strong>
-                <br />
-                根据环境检测结果，自动选择合适的 MSAL 客户端类型：
-              </Text>
+              <Body1Strong>MSAL 客户端初始化：</Body1Strong>
+              <Body1>根据环境检测结果，自动选择合适的 MSAL 客户端类型：</Body1>
 
               <div className={styles.codeContainer}>
-                <Text size={200}>
-                  来源文件:{" "}
-                  <span className={styles.highlight}>
-                    src/services/authService.ts
-                  </span>
-                </Text>
+                <Body1 className={styles.highlight}>
+                  src/services/authService.ts
+                </Body1>
+
                 <SyntaxHighlighter
                   language="typescript"
                   style={vscDarkPlus}
-                  customStyle={{ borderRadius: "8px" }}
+                  customStyle={{ borderRadius: "6px" }}
                 >
                   {msalInitCode}
                 </SyntaxHighlighter>
               </div>
 
-              <Text>
-                <strong>Token获取策略：</strong>
-                <br />
+              <Body1Strong>Token获取策略：</Body1Strong>
+              <Body1>
                 遵循 MSAL.js
                 最佳实践，始终先尝试静默获取，失败后根据环境选择合适的交互式方法：
-              </Text>
+              </Body1>
 
               <div className={styles.codeContainer}>
+                <Body1 className={styles.highlight}>
+                  src/services/authService.ts
+                </Body1>
                 <SyntaxHighlighter
                   language="typescript"
                   style={vscDarkPlus}
@@ -500,21 +517,49 @@ export async function initializeTeamsSDK(): Promise<void> {
               </div>
 
               <div className={styles.importantNote}>
-                <Text weight="semibold">💡 最佳实践说明</Text>
-                <Text>
-                  • <strong>静默优先</strong>: 始终先尝试{" "}
-                  <span className={styles.highlight}>acquireTokenSilent()</span>
-                  <br />• <strong>环境适配</strong>: Teams 环境使用{" "}
-                  <span className={styles.highlight}>loginPopup()</span>
-                  ，浏览器使用{" "}
-                  <span className={styles.highlight}>loginRedirect()</span>
-                  <br />• <strong>错误处理</strong>: 完整的错误捕获和降级策略
-                  <br />• <strong>性能优化</strong>: 添加 redirectUri
-                  参数提升认证性能
-                </Text>
+                <Body1Strong>💡 最佳实践说明</Body1Strong>
+                <ul className={styles.noIndentList}>
+                  <li>
+                    <Body1>
+                      <Body1Strong>静默优先</Body1Strong>: 始终先尝试
+                      <Body1 className={styles.highlight}>
+                        acquireTokenSilent()
+                      </Body1>
+                    </Body1>
+                  </li>
+                  <li>
+                    <Body1>
+                      <Body1Strong>环境适配</Body1Strong>: Teams 环境使用
+                      <Body1 className={styles.highlight}>loginPopup()</Body1>
+                      ，浏览器使用
+                      <Body1 className={styles.highlight}>
+                        loginRedirect()
+                      </Body1>
+                      (当然也可以用loginPopup，这里只是为了演示redirect)
+                    </Body1>
+                  </li>
+                  <li>
+                    <Body1>
+                      <Body1Strong>错误处理</Body1Strong>:
+                      完整的错误捕获和降级策略
+                    </Body1>
+                  </li>
+                  <li>
+                    <Body1>
+                      <Body1Strong>性能优化</Body1Strong>: acquireTokenSilent 和
+                      loginPopup 添加 redirectUri 参数提升认证性能，参考
+                      <Link
+                        href="https://learn.microsoft.com/en-us/entra/msal/javascript/browser/errors#block_iframe_reload"
+                        target="_blank"
+                      >
+                        此文档
+                      </Link>
+                    </Body1>
+                  </li>
+                </ul>
               </div>
 
-              <Text>
+              <Body1>
                 更多 MSAL.js 最佳实践:{" "}
                 <Link
                   href="https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-browser/docs/acquire-token.md"
@@ -522,7 +567,7 @@ export async function initializeTeamsSDK(): Promise<void> {
                 >
                   MSAL.js Token获取文档
                 </Link>
-              </Text>
+              </Body1>
             </Card>
           </AccordionPanel>
         </AccordionItem>
