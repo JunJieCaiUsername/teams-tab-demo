@@ -1,7 +1,6 @@
 import React from "react";
 import {
   Text,
-  Title3,
   Card,
   makeStyles,
   tokens,
@@ -15,10 +14,12 @@ import {
   mergeClasses,
   Subtitle1,
   Body2,
+  Subtitle2,
+  Body1Strong,
+  Body1,
 } from "@fluentui/react-components";
 import {
   CheckmarkCircleColor,
-  ChevronRightRegular,
   DismissCircleColor,
 } from "@fluentui/react-icons";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
@@ -40,6 +41,7 @@ const useStyles = makeStyles({
   },
   stepCard: {
     marginBottom: tokens.spacingVerticalM,
+    backgroundColor: tokens.colorNeutralBackground2,
   },
   codeContainer: {
     marginTop: tokens.spacingVerticalM,
@@ -50,18 +52,6 @@ const useStyles = makeStyles({
     alignItems: "center",
     gap: tokens.spacingHorizontalM,
     marginBottom: tokens.spacingVerticalM,
-  },
-  stepNumber: {
-    minWidth: "32px",
-    height: "32px",
-    borderRadius: "50%",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: tokens.colorBrandBackground,
-    color: tokens.colorNeutralForegroundOnBrand,
-    fontSize: tokens.fontSizeBase200,
-    fontWeight: tokens.fontWeightSemibold,
   },
   comparison: {
     display: "flex",
@@ -97,6 +87,11 @@ const useStyles = makeStyles({
     margin: 0,
     padding: 0,
     listStylePosition: "inside", // 可选，保持圆点在内容内侧
+  },
+  accordionHeader: {
+    "& button": {
+      paddingInline: `0 !important`,
+    },
   },
 });
 
@@ -254,6 +249,14 @@ export async function initializeTeamsSDK(): Promise<void> {
 
   return (
     <div className={styles.container}>
+      <Subtitle1 as="h3">为什么推荐 NAA?</Subtitle1>
+      <Body2 as="p" className={styles.paragraph}>
+        NAA (Nested App Authentication) 是 Microsoft 专为 Teams、Outlook
+        等宿主环境设计的新一代身份验证协议。 它通过让 Teams
+        充当认证代理，直接为嵌套应用获取访问Token，从而简化了架构并提升了用户体验。
+        相比传统的 On-Behalf-Of 流程，NAA
+        消除了中间层服务器的需求，支持Token预取，并提供更好的性能和安全性。
+      </Body2>
       <div className={styles.comparison}>
         <Card
           className={mergeClasses(styles.comparisonCard, styles.newWay)}
@@ -310,43 +313,26 @@ export async function initializeTeamsSDK(): Promise<void> {
           </ul>
         </Card>
       </div>
-
-      <Subtitle1>为什么推荐 NAA?</Subtitle1>
-      <Body2 as="p" className={styles.paragraph}>
-        NAA (Nested App Authentication) 是 Microsoft 专为 Teams、Outlook
-        等宿主环境设计的新一代身份验证协议。 它通过让 Teams
-        充当认证代理，直接为嵌套应用获取访问Token，从而简化了架构并提升了用户体验。
-        相比传统的 On-Behalf-Of 流程，NAA
-        消除了中间层服务器的需求，支持Token预取，并提供更好的性能和安全性。
-      </Body2>
-
-      <Accordion multiple collapsible>
+      <Subtitle1 as="h3">简要步骤</Subtitle1>
+      <Accordion multiple collapsible className={styles.accordionHeader}>
         {/* Step 1 */}
         <AccordionItem value="step1">
-          <AccordionHeader expandIcon={<ChevronRightRegular />}>
-            <div className={styles.stepHeader}>
-              <div className={styles.stepNumber}>1</div>
-              <Title3>配置 Azure AD 应用注册和 Teams 清单</Title3>
-            </div>
+          <AccordionHeader>
+            <Subtitle2>Step 1: 配置 Azure AD 应用注册和 Teams 清单</Subtitle2>
           </AccordionHeader>
           <AccordionPanel>
             <Card className={styles.stepCard}>
-              <Text>
-                <strong>Azure AD 应用注册配置：</strong>
-                <br />
+              <Body1Strong>Azure AD 应用注册配置：</Body1Strong>
+              <Body1>
                 在你的 Azure AD 应用注册中，需要添加 NAA 专用的重定向 URI：
-              </Text>
-
-              <div className={styles.codeContainer}>
-                <Text weight="semibold">重定向 URI 格式：</Text>
-                <div className={styles.highlight}>
-                  brk-multihub://&lt;your-domain&gt;
-                </div>
-                <Text size={200}>
-                  例如：<code>brk-multihub://contoso.com</code> 或{" "}
-                  <code>brk-multihub://your-app.ngrok.io</code>
-                </Text>
-              </div>
+              </Body1>
+              <Body1 className={styles.highlight}>
+                brk-multihub://&lt;your-domain&gt;
+              </Body1>
+              <Body1>
+                例如：brk-multihub://contoso.com 或
+                brk-multihub://your-app.ngrok.io
+              </Body1>
 
               <Text>
                 <strong>Teams 应用清单配置：</strong>
@@ -398,11 +384,8 @@ export async function initializeTeamsSDK(): Promise<void> {
 
         {/* Step 2 */}
         <AccordionItem value="step2">
-          <AccordionHeader expandIcon={<ChevronRightRegular />}>
-            <div className={styles.stepHeader}>
-              <div className={styles.stepNumber}>2</div>
-              <Title3>环境检测和 Teams SDK 初始化</Title3>
-            </div>
+          <AccordionHeader>
+            <Subtitle2>Step 2: 环境检测和 Teams SDK 初始化</Subtitle2>
           </AccordionHeader>
           <AccordionPanel>
             <Card className={styles.stepCard}>
@@ -472,11 +455,8 @@ export async function initializeTeamsSDK(): Promise<void> {
 
         {/* Step 3 */}
         <AccordionItem value="step3">
-          <AccordionHeader expandIcon={<ChevronRightRegular />}>
-            <div className={styles.stepHeader}>
-              <div className={styles.stepNumber}>3</div>
-              <Title3>基于环境创建 MSAL 客户端和Token获取</Title3>
-            </div>
+          <AccordionHeader>
+            <Subtitle2>Step 3: 基于环境创建 MSAL 客户端和Token获取</Subtitle2>
           </AccordionHeader>
           <AccordionPanel>
             <Card className={styles.stepCard}>

@@ -4,7 +4,7 @@ import {
   makeStyles,
   tokens,
   Spinner,
-  LargeTitle,
+  Title1,
 } from "@fluentui/react-components";
 import ProfileData from "./ProfileData";
 import NAAIntroduction from "./NAAIntroduction";
@@ -21,7 +21,7 @@ const useStyles = makeStyles({
   },
   title: {
     textAlign: "left",
-    marginBottom: tokens.spacingVerticalXXL,
+    marginBottom: tokens.spacingVerticalXXXL,
   },
   loading: {
     textAlign: "center",
@@ -66,9 +66,9 @@ const TeamsAppAuthDemo: React.FC = () => {
 
   return (
     <div className={styles.mainContent}>
-      <LargeTitle as="h1" className={styles.title}>
+      <Title1 as="h1" className={styles.title}>
         为普通 AAD 网站启用 Teams NAA
-      </LargeTitle>
+      </Title1>
 
       <NAAIntroduction />
 

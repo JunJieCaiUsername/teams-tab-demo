@@ -7,7 +7,7 @@ import {
   CardHeader,
   Body2,
   type CardHeaderSlots,
-  LargeTitle,
+  Title1,
 } from "@fluentui/react-components";
 import { ArrowRightFilled, GlobeShieldColor } from "@fluentui/react-icons";
 import { useNavigate } from "react-router-dom";
@@ -26,7 +26,6 @@ const useStyles = makeStyles({
     display: "flex",
     flexDirection: "column",
     gap: tokens.spacingVerticalXL,
-    textAlign: "left",
   },
   title: {
     textAlign: "left",
@@ -85,9 +84,9 @@ const Homepage = () => {
 
   return (
     <div className={styles.container}>
-      <LargeTitle as="h1" className={styles.title}>
+      <Title1 as="h1" className={styles.title}>
         Welcome to the Teams Tab Demo Hub
-      </LargeTitle>
+      </Title1>
       <Body2 className={styles.paragraph}>
         This is an app demonstrating features and provide guidance for
         developing Microsoft Teams Tab App, especially within the 21Vianet
