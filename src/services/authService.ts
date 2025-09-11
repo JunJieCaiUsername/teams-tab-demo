@@ -91,7 +91,7 @@ export async function acquireToken(
     // Always try silent acquisition first
     const silentRequest: SilentRequest = {
       scopes,
-      redirectUri: getRedirectUri(), // Add redirectUri for silent authentication to improve performance
+      // Add redirectUri for silent authentication to improve performance
     };
     // For NAA: get/setActiveAccount is considered NO OP api, since the account is managed by the host (Teams)
     // a bridgeproxy works as a proxy to make communication between the Teams (Host App) and Teams tab (Child App)
