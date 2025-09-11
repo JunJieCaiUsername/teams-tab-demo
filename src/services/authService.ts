@@ -109,6 +109,7 @@ export async function acquireToken(
         silentRequest.account = accounts[0];
       }
     }
+    console.log(`Account: ${accounts}`);
     console.log(
       `Attempting silent token acquisition for ${currentEnvironment}, request: ${JSON.stringify(
         silentRequest

@@ -110,7 +110,7 @@ const NAAIntroduction: React.FC = () => {
       {
         "redirectUri": "brk-multihub://your-domain.com",
         "scopes": ["User.Read", "Mail.Read"],
-        "claims": "{\\"access_token\\":{\\"xms_cc\\":{\\"values\\":[\\"CP1\\"]}}}"
+        "claims": "{\\"access_token\\":{\\"xms_cc\\":{\\"values\\":[\\"CP1\\"]}}}" //optional
       }
     ]
   }
@@ -346,9 +346,10 @@ export async function initializeTeamsSDK(): Promise<void> {
 
               <div className={styles.codeContainer}>
                 <Body1>
-                  在 Teams App Manifest中添加
+                  在 Teams App Manifest 中添加
                   <Body1 className={styles.highlight}>nestedAppAuthInfo</Body1>
-                  部分， 启用Token预取功能以提升性能：
+                  部分， 启用 Token 预取功能。 Teams 可以提前获取并缓存 Access
+                  Token， 供Tab调用：
                 </Body1>
                 <SyntaxHighlighter
                   language="json"
@@ -364,10 +365,38 @@ export async function initializeTeamsSDK(): Promise<void> {
                 <ul className={styles.noIndentList}>
                   <li>
                     <Body1>
+                      预取相当于提前调用了 acquireToken ，所以一般预取 Tab
+                      首次载入时需要的 Token 即可，比如获得用户信息
+                    </Body1>
+                  </li>
+                  <li>
+                    <Body1>
+                      <Body1 className={styles.highlight}>
+                        nestedAppAuthInfo
+                      </Body1>{" "}
+                      填写的内容必须和代码中的 Request 一致，Teams
+                      才会把缓存交给 Tab 使用
+                    </Body1>
+                  </li>
+
+                  <li>
+                    <Body1>
                       <Body1 className={styles.highlight}>
                         webApplicationInfo.id
                       </Body1>
                       必须与你的 AAD App 的 Client ID 完全匹配
+                    </Body1>
+                  </li>
+                  <li>
+                    <Body1>
+                      <Body1 className={styles.highlight}>resource</Body1>
+                      若不配置传统 OBO SSO ，填写 Dummy 字符串， 参考{" "}
+                      <Link
+                        href="https://learn.microsoft.com/en-us/microsoftteams/platform/resources/schema/manifest-schema#webapplicationinfo"
+                        target="_blank"
+                      >
+                        webApplicationInfo
+                      </Link>
                     </Body1>
                   </li>
                   <li>
@@ -379,20 +408,22 @@ export async function initializeTeamsSDK(): Promise<void> {
                   <li>
                     <Body1>
                       <Body1 className={styles.highlight}>scopes</Body1>
-                      定义Teams App启动时预取的Scope，必须和AAD
-                      APP中配置的scope一致
+                      必须和代码中 Token Request 的 scope 内容和顺序一致
                     </Body1>
                   </li>
+
                   <li>
                     <Body1>
-                      <Body1 className={styles.highlight}>resource</Body1>
-                      在不配置传统OBO SSO情况下，填写 Dummy 字符串， 参考{" "}
+                      <Body1 className={styles.highlight}>claims</Body1>
+                      用作
                       <Link
-                        href="https://learn.microsoft.com/en-us/microsoftteams/platform/resources/schema/manifest-schema#webapplicationinfo"
+                        href="https://learn.microsoft.com/en-us/entra/identity-platform/app-resilience-continuous-access-evaluation"
                         target="_blank"
                       >
-                        webApplicationInfo
-                      </Link>
+                        启用 CAE
+                      </Link>{" "}
+                      和 Authentication Context，不使用的话
+                      <Body1Strong>不要添加</Body1Strong>
                     </Body1>
                   </li>
                 </ul>
