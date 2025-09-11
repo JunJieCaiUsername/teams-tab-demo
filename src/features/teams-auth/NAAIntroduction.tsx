@@ -105,7 +105,7 @@ const NAAIntroduction: React.FC = () => {
   const manifestCode = `{
   "webApplicationInfo": {
     "id": "your-client-id",
-    "resource": "https://example.com",
+    "resource": "https://example",
     "nestedAppAuthInfo": [
       {
         "redirectUri": "brk-multihub://your-domain.com",
@@ -323,13 +323,15 @@ export async function initializeTeamsSDK(): Promise<void> {
         {/* Step 1 */}
         <AccordionItem value="step1">
           <AccordionHeader>
-            <Subtitle2>Step 1: 配置 Azure AD 应用注册和 Teams 清单</Subtitle2>
+            <Subtitle2>
+              Step 1: 配置 Azure AD App Registration和 Teams 清单
+            </Subtitle2>
           </AccordionHeader>
           <AccordionPanel>
             <Card className={styles.stepCard}>
-              <Body1Strong>Azure AD 应用注册配置：</Body1Strong>
+              <Body1Strong>Azure AD App Registration配置：</Body1Strong>
               <Body1>
-                在你的 Azure AD 应用注册中，需要添加 NAA
+                在你的 Azure AD App Registration中，需要添加 NAA
                 专用的重定向域名（只要域名）：
               </Body1>
               <Body1 className={styles.highlight}>
@@ -340,11 +342,11 @@ export async function initializeTeamsSDK(): Promise<void> {
                 brk-multihub://your-app.ngrok.io
               </Body1>
 
-              <Body1Strong>Teams 应用清单配置：</Body1Strong>
+              <Body1Strong>Teams App Manifest配置：</Body1Strong>
 
               <div className={styles.codeContainer}>
                 <Body1>
-                  在 Teams 应用清单中添加
+                  在 Teams App Manifest中添加
                   <Body1 className={styles.highlight}>nestedAppAuthInfo</Body1>
                   部分， 启用Token预取功能以提升性能：
                 </Body1>
@@ -365,29 +367,39 @@ export async function initializeTeamsSDK(): Promise<void> {
                       <Body1 className={styles.highlight}>
                         webApplicationInfo.id
                       </Body1>
-                      必须与你的 Azure AD 应用客户端 ID 完全匹配
+                      必须与你的 AAD App 的 Client ID 完全匹配
                     </Body1>
                   </li>
                   <li>
                     <Body1>
                       <Body1 className={styles.highlight}>redirectUri</Body1>
-                      必须与 Azure AD 中配置的重定向 URI 一致
+                      必须与 AAD 中配置的 NAA 重定向 URI 一致
                     </Body1>
                   </li>
                   <li>
                     <Body1>
                       <Body1 className={styles.highlight}>scopes</Body1>
-                      定义应用启动时预取的权限范围
+                      定义Teams App启动时预取的Scope，必须和AAD
+                      APP中配置的scope一致
                     </Body1>
                   </li>
                   <li>
-                    <Body1>Token预取功能可显著减少首次认证延迟</Body1>
+                    <Body1>
+                      <Body1 className={styles.highlight}>resource</Body1>
+                      在不配置传统OBO SSO情况下，填写 Dummy 字符串， 参考{" "}
+                      <Link
+                        href="https://learn.microsoft.com/en-us/microsoftteams/platform/resources/schema/manifest-schema#webapplicationinfo"
+                        target="_blank"
+                      >
+                        webApplicationInfo
+                      </Link>
+                    </Body1>
                   </li>
                 </ul>
               </div>
 
               <Body1>
-                更多详情请参考:
+                更多详情请参考:{" "}
                 <Link
                   href="https://learn.microsoft.com/en-us/microsoftteams/platform/concepts/authentication/nested-authentication#token-prefetching-for-nested-app-authentication-naa"
                   target="_blank"
@@ -560,7 +572,7 @@ export async function initializeTeamsSDK(): Promise<void> {
               </div>
 
               <Body1>
-                更多 MSAL.js 最佳实践:{" "}
+                更多 MSAL.js 最佳实践:App Manifest
                 <Link
                   href="https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-browser/docs/acquire-token.md"
                   target="_blank"
@@ -583,21 +595,21 @@ export async function initializeTeamsSDK(): Promise<void> {
         </Text>
 
         <Text>
-          想了解更多技术细节？查看{" "}
+          想了解更多技术细节？查看App Manifest
           <Link
             href="https://github.com/AzureAD/microsoft-authentication-library-for-js"
             target="_blank"
           >
             MSAL.js GitHub
-          </Link>{" "}
-          和{" "}
+          </Link>
+          App Manifest 和App Manifest
           <Link
             href="https://github.com/OfficeDev/microsoft-teams-library-js"
             target="_blank"
           >
             Teams SDK GitHub
-          </Link>{" "}
-          了解底层实现原理。
+          </Link>
+          App Manifest 了解底层实现原理。
         </Text>
       </div>
     </div>
