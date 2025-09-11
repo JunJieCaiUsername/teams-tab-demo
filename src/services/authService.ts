@@ -91,6 +91,8 @@ export async function acquireToken(
     // Always try silent acquisition first
     const silentRequest: SilentRequest = {
       scopes,
+      redirectUri:
+        "brk-multihub://brave-stone-0cb7f1b00-commercial.eastasia.2.azurestaticapps.net",
       // Add redirectUri for silent authentication to improve performance
     };
     // For NAA: get/setActiveAccount is considered NO OP api, since the account is managed by the host (Teams)
