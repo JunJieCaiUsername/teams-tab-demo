@@ -85,6 +85,7 @@ const useStyles = makeStyles({
     borderRadius: tokens.borderRadiusMedium,
     padding: tokens.spacingVerticalM,
     marginTop: tokens.spacingVerticalM,
+    lineHeight: 2,
   },
   noIndentList: {
     margin: 0,
@@ -329,21 +330,29 @@ export async function initializeTeamsSDK(): Promise<void> {
           </AccordionHeader>
           <AccordionPanel>
             <Card className={styles.stepCard}>
-              <Body1Strong>Azure AD App Registration配置：</Body1Strong>
+              <Body1Strong>1. Azure AD App Registration配置：</Body1Strong>
               <Body1>
                 在你的 Azure AD App Registration中，需要添加 NAA
-                专用的重定向域名（只要域名）：
+                专用的重定向URL：
               </Body1>
               <Body1 className={styles.highlight}>
                 brk-multihub://&lt;your-domain&gt;
               </Body1>
               <Body1>
                 例如：brk-multihub://contoso.com 或
-                brk-multihub://your-app.ngrok.io
+                brk-multihub://your-app.ngrok.io，切记只要域名
               </Body1>
 
-              <Body1Strong>Teams App Manifest配置：</Body1Strong>
-
+              <Body1Strong>2. (可选) Teams App Manifest配置：</Body1Strong>
+              <Body1>
+                * 经测试，未成功启用，已向微软提交{" "}
+                <Link
+                  href="https://github.com/MicrosoftDocs/msteams-docs/issues/13311"
+                  target="_blank"
+                >
+                  issue
+                </Link>
+              </Body1>
               <div className={styles.codeContainer}>
                 <Body1>
                   在 Teams App Manifest 中添加
@@ -351,6 +360,7 @@ export async function initializeTeamsSDK(): Promise<void> {
                   部分， 启用 Token 预取功能。 Teams 可以提前获取并缓存 Access
                   Token， 供Tab调用：
                 </Body1>
+
                 <SyntaxHighlighter
                   language="json"
                   style={vscDarkPlus}
@@ -390,19 +400,23 @@ export async function initializeTeamsSDK(): Promise<void> {
                   <li>
                     <Body1>
                       <Body1 className={styles.highlight}>resource</Body1>
-                      若不配置传统 OBO SSO ，填写 Dummy 字符串， 参考{" "}
+                      文档称：若不配置传统 OBO SSO ，填写 Dummy 字符串， 参考{" "}
                       <Link
                         href="https://learn.microsoft.com/en-us/microsoftteams/platform/resources/schema/manifest-schema#webapplicationinfo"
                         target="_blank"
                       >
                         webApplicationInfo
                       </Link>
+                      。但实际测试后，仅使用NAA时不添加此属性也能工作，添加了反而会有个AAD错误。
                     </Body1>
                   </li>
                   <li>
                     <Body1>
                       <Body1 className={styles.highlight}>redirectUri</Body1>
-                      必须与 AAD 中配置的 NAA 重定向 URI 一致
+                      必须使用
+                      <Body1 className={styles.highlight}>
+                        brk-multihub://&lt;your-domain&gt;
+                      </Body1>
                     </Body1>
                   </li>
                   <li>
@@ -445,14 +459,14 @@ export async function initializeTeamsSDK(): Promise<void> {
         {/* Step 2 */}
         <AccordionItem value="step2">
           <AccordionHeader>
-            <Subtitle2>Step 2: 环境检测和 Teams SDK 初始化</Subtitle2>
+            <Subtitle2>Step 2: 环境检测和 TeamsJS 初始化</Subtitle2>
           </AccordionHeader>
           <AccordionPanel>
             <Card className={styles.stepCard}>
-              <Body1Strong>Teams SDK 初始化：</Body1Strong>
+              <Body1Strong>TeamsJS 初始化：</Body1Strong>
               <Body1>
-                必须在 MSAL 初始化之前先初始化 Teams SDK，
-                <Badge appearance="filled" color="important">
+                必须在 MSAL 初始化之前先初始化 TeamsJS，
+                <Badge appearance="filled" color="brand">
                   中国区用户特别注意
                 </Badge>
                 需要添加特定的 validMessageOrigins：

@@ -93,6 +93,7 @@ export async function acquireToken(
       scopes,
       redirectUri:
         "brk-multihub://brave-stone-0cb7f1b00-commercial.eastasia.2.azurestaticapps.net",
+      // getRedirectUri(),
       // Add redirectUri for silent authentication to improve performance
     };
     // For NAA: get/setActiveAccount is considered NO OP api, since the account is managed by the host (Teams)
@@ -111,7 +112,7 @@ export async function acquireToken(
         silentRequest.account = accounts[0];
       }
     }
-    console.log(`Account: ${accounts}`);
+    console.log(`Accounts: ${JSON.stringify(accounts)}`);
     console.log(
       `Attempting silent token acquisition for ${currentEnvironment}, request: ${JSON.stringify(
         silentRequest
