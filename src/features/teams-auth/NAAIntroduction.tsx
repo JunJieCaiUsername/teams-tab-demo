@@ -1,6 +1,5 @@
 import React from "react";
 import {
-  Text,
   Card,
   makeStyles,
   tokens,
@@ -69,11 +68,6 @@ const useStyles = makeStyles({
     border: `1px solid ${tokens.colorPaletteGreenBorder2}`,
   },
   highlight: {
-    backgroundColor: tokens.colorNeutralBackground6,
-    padding: tokens.spacingHorizontalXS,
-    borderRadius: tokens.borderRadiusSmall,
-    fontFamily: tokens.fontFamilyMonospace,
-    fontSize: tokens.fontSizeBase200,
     margin: `0 ${tokens.spacingHorizontalXS}`,
   },
   importantNote: {
@@ -90,12 +84,14 @@ const useStyles = makeStyles({
   noIndentList: {
     margin: 0,
     padding: 0,
-    listStylePosition: "inside", // 可选，保持圆点在内容内侧
+    listStylePosition: "inside",
+    lineHeight: 2, // 可选，保持圆点在内容内侧
   },
-  accordionHeader: {
+  accordion: {
     "& button": {
       paddingInline: `0 !important`,
     },
+    marginBottom: tokens.spacingVerticalL,
   },
 });
 
@@ -256,10 +252,10 @@ export async function initializeTeamsSDK(): Promise<void> {
       <Subtitle1 as="h3">为什么推荐 NAA?</Subtitle1>
       <Body2 as="p" className={styles.paragraph}>
         NAA (Nested App Authentication) 是 Microsoft 专为 Teams、Outlook
-        等宿主环境设计的新一代身份验证协议。 它通过让 Teams
+        等宿主环境设计的新一代身份验证协议。 它通过让 Teams 等 Host
         充当认证代理，直接为嵌套应用获取访问Token，从而简化了架构并提升了用户体验。
         相比传统的 On-Behalf-Of 流程，NAA
-        消除了中间层服务器的需求，支持Token预取，并提供更好的性能和安全性。
+        消除了中间层服务的需求，支持Token预取，并提供更好的性能和安全性。
       </Body2>
       <div className={styles.comparison}>
         <Card
@@ -320,24 +316,29 @@ export async function initializeTeamsSDK(): Promise<void> {
 
       <Subtitle1 as="h3">简要步骤</Subtitle1>
       {/* Accordions */}
-      <Accordion multiple collapsible className={styles.accordionHeader}>
+      <Accordion multiple collapsible className={styles.accordion}>
         {/* Step 1 */}
         <AccordionItem value="step1">
           <AccordionHeader>
             <Subtitle2>
-              Step 1: 配置 Azure AD App Registration和 Teams 清单
+              Step 1: 配置 Azure AD App Registration 和 Teams App Manifest
             </Subtitle2>
           </AccordionHeader>
           <AccordionPanel>
             <Card className={styles.stepCard}>
-              <Body1Strong>1. Azure AD App Registration配置：</Body1Strong>
+              <Body1Strong>1. Azure AD App Registration 配置：</Body1Strong>
               <Body1>
-                在你的 Azure AD App Registration中，需要添加 NAA
+                在你的 Azure AD App Registration 中，需要添加 NAA
                 专用的重定向URL：
+                <Badge
+                  shape="rounded"
+                  color="informative"
+                  className={styles.highlight}
+                >
+                  brk-multihub://&lt;your-domain&gt;
+                </Badge>
               </Body1>
-              <Body1 className={styles.highlight}>
-                brk-multihub://&lt;your-domain&gt;
-              </Body1>
+
               <Body1>
                 例如：brk-multihub://contoso.com 或
                 brk-multihub://your-app.ngrok.io，切记只要域名
@@ -356,9 +357,15 @@ export async function initializeTeamsSDK(): Promise<void> {
               <div className={styles.codeContainer}>
                 <Body1>
                   在 Teams App Manifest 中添加
-                  <Body1 className={styles.highlight}>nestedAppAuthInfo</Body1>
+                  <Badge
+                    shape="rounded"
+                    color="informative"
+                    className={styles.highlight}
+                  >
+                    nestedAppAuthInfo
+                  </Badge>
                   部分， 启用 Token 预取功能。 Teams 可以提前获取并缓存 Access
-                  Token， 供Tab调用：
+                  Token， 供 Tab 调用：
                 </Body1>
 
                 <SyntaxHighlighter
@@ -375,15 +382,19 @@ export async function initializeTeamsSDK(): Promise<void> {
                 <ul className={styles.noIndentList}>
                   <li>
                     <Body1>
-                      预取相当于提前调用了 acquireToken ，所以一般预取 Tab
+                      预取相当于提前调用了 acquireToken，所以一般预取 Tab
                       首次载入时需要的 Token 即可，比如获得用户信息
                     </Body1>
                   </li>
                   <li>
                     <Body1>
-                      <Body1 className={styles.highlight}>
+                      <Badge
+                        shape="rounded"
+                        color="informative"
+                        className={styles.highlight}
+                      >
                         nestedAppAuthInfo
-                      </Body1>{" "}
+                      </Badge>{" "}
                       填写的内容必须和代码中的 Request 一致，Teams
                       才会把缓存交给 Tab 使用
                     </Body1>
@@ -391,15 +402,25 @@ export async function initializeTeamsSDK(): Promise<void> {
 
                   <li>
                     <Body1>
-                      <Body1 className={styles.highlight}>
+                      <Badge
+                        shape="rounded"
+                        color="informative"
+                        className={styles.highlight}
+                      >
                         webApplicationInfo.id
-                      </Body1>
+                      </Badge>
                       必须与你的 AAD App 的 Client ID 完全匹配
                     </Body1>
                   </li>
                   <li>
                     <Body1>
-                      <Body1 className={styles.highlight}>resource</Body1>
+                      <Badge
+                        shape="rounded"
+                        color="informative"
+                        className={styles.highlight}
+                      >
+                        resource
+                      </Badge>
                       文档称：若不配置传统 OBO SSO ，填写 Dummy 字符串， 参考{" "}
                       <Link
                         href="https://learn.microsoft.com/en-us/microsoftteams/platform/resources/schema/manifest-schema#webapplicationinfo"
@@ -412,23 +433,44 @@ export async function initializeTeamsSDK(): Promise<void> {
                   </li>
                   <li>
                     <Body1>
-                      <Body1 className={styles.highlight}>redirectUri</Body1>
+                      <Badge
+                        shape="rounded"
+                        color="informative"
+                        className={styles.highlight}
+                      >
+                        redirectUri
+                      </Badge>
                       必须使用
-                      <Body1 className={styles.highlight}>
+                      <Badge
+                        shape="rounded"
+                        color="informative"
+                        className={styles.highlight}
+                      >
                         brk-multihub://&lt;your-domain&gt;
-                      </Body1>
+                      </Badge>
                     </Body1>
                   </li>
                   <li>
                     <Body1>
-                      <Body1 className={styles.highlight}>scopes</Body1>
+                      <Badge
+                        shape="rounded"
+                        color="informative"
+                        className={styles.highlight}
+                      >
+                        scopes
+                      </Badge>
                       必须和代码中 Token Request 的 scope 内容和顺序一致
                     </Body1>
                   </li>
-
                   <li>
                     <Body1>
-                      <Body1 className={styles.highlight}>claims</Body1>
+                      <Badge
+                        shape="rounded"
+                        color="informative"
+                        className={styles.highlight}
+                      >
+                        claims
+                      </Badge>
                       用作
                       <Link
                         href="https://learn.microsoft.com/en-us/entra/identity-platform/app-resilience-continuous-access-evaluation"
@@ -442,14 +484,13 @@ export async function initializeTeamsSDK(): Promise<void> {
                   </li>
                 </ul>
               </div>
-
               <Body1>
                 更多详情请参考:{" "}
                 <Link
                   href="https://learn.microsoft.com/en-us/microsoftteams/platform/concepts/authentication/nested-authentication#token-prefetching-for-nested-app-authentication-naa"
                   target="_blank"
                 >
-                  Teams NAA Token预取文档
+                  Teams NAA Token 预取文档
                 </Link>
               </Body1>
             </Card>
@@ -463,19 +504,23 @@ export async function initializeTeamsSDK(): Promise<void> {
           </AccordionHeader>
           <AccordionPanel>
             <Card className={styles.stepCard}>
-              <Body1Strong>TeamsJS 初始化：</Body1Strong>
+              <Body1Strong>1. TeamsJS 初始化：</Body1Strong>
               <Body1>
                 必须在 MSAL 初始化之前先初始化 TeamsJS，
                 <Badge appearance="filled" color="brand">
                   中国区用户特别注意
                 </Badge>
-                需要添加特定的 validMessageOrigins：
+                : 需要添加特定的 validMessageOrigins：
               </Body1>
 
               <div className={styles.codeContainer}>
-                <Body1 className={styles.highlight}>
+                <Badge
+                  shape="rounded"
+                  color="informative"
+                  className={styles.highlight}
+                >
                   src/services/teamsSDKService.ts
-                </Body1>
+                </Badge>
 
                 <SyntaxHighlighter
                   language="typescript"
@@ -486,13 +531,17 @@ export async function initializeTeamsSDK(): Promise<void> {
                 </SyntaxHighlighter>
               </div>
 
-              <Body1Strong>环境检测逻辑：</Body1Strong>
+              <Body1Strong>2. 环境检测逻辑：</Body1Strong>
               <Body1>通过三步检测确定当前运行环境和 NAA 支持状态：</Body1>
 
               <div className={styles.codeContainer}>
-                <Body1 className={styles.highlight}>
+                <Badge
+                  shape="rounded"
+                  color="informative"
+                  className={styles.highlight}
+                >
                   src/services/environmentDetection.ts
-                </Body1>
+                </Badge>
 
                 <SyntaxHighlighter
                   language="typescript"
@@ -524,6 +573,20 @@ export async function initializeTeamsSDK(): Promise<void> {
                       检查支持状态 → 确定 NAA 可用性
                     </Body1>
                   </li>
+                  <li>
+                    <Body1>
+                      本示例并未配置传统 OBO 流程，所以 Teams_NO_NAA
+                      情况并未部署。微软建议部署 fallback 到
+                      OBO方式，以防部分老旧客户端不支持 NAA。
+                    </Body1>
+                  </li>
+                  <li>
+                    <Body1>
+                      这里的环境检测逻辑非最佳实践，Teams Personal Tab
+                      还可以运行在 Outlook 和 Office Portal
+                      上，客户端支持情况不一
+                    </Body1>
+                  </li>
                 </ul>
               </div>
             </Card>
@@ -533,7 +596,7 @@ export async function initializeTeamsSDK(): Promise<void> {
         {/* Step 3 */}
         <AccordionItem value="step3">
           <AccordionHeader>
-            <Subtitle2>Step 3: 基于环境创建 MSAL 客户端和Token获取</Subtitle2>
+            <Subtitle2>Step 3: 基于环境创建 MSAL 客户端和 Token 获取</Subtitle2>
           </AccordionHeader>
           <AccordionPanel>
             <Card className={styles.stepCard}>
@@ -541,9 +604,13 @@ export async function initializeTeamsSDK(): Promise<void> {
               <Body1>根据环境检测结果，自动选择合适的 MSAL 客户端类型：</Body1>
 
               <div className={styles.codeContainer}>
-                <Body1 className={styles.highlight}>
+                <Badge
+                  shape="rounded"
+                  color="informative"
+                  className={styles.highlight}
+                >
                   src/services/authService.ts
-                </Body1>
+                </Badge>
 
                 <SyntaxHighlighter
                   language="typescript"
@@ -554,16 +621,20 @@ export async function initializeTeamsSDK(): Promise<void> {
                 </SyntaxHighlighter>
               </div>
 
-              <Body1Strong>Token获取策略：</Body1Strong>
+              <Body1Strong>Token 获取策略：</Body1Strong>
               <Body1>
                 遵循 MSAL.js
                 最佳实践，始终先尝试静默获取，失败后根据环境选择合适的交互式方法：
               </Body1>
 
               <div className={styles.codeContainer}>
-                <Body1 className={styles.highlight}>
+                <Badge
+                  shape="rounded"
+                  color="informative"
+                  className={styles.highlight}
+                >
                   src/services/authService.ts
-                </Body1>
+                </Badge>
                 <SyntaxHighlighter
                   language="typescript"
                   style={vscDarkPlus}
@@ -574,25 +645,39 @@ export async function initializeTeamsSDK(): Promise<void> {
               </div>
 
               <div className={styles.importantNote}>
-                <Body1Strong>💡 最佳实践说明</Body1Strong>
+                <Body1Strong>💡 微软建议说明</Body1Strong>
                 <ul className={styles.noIndentList}>
                   <li>
                     <Body1>
                       <Body1Strong>静默优先</Body1Strong>: 始终先尝试
-                      <Body1 className={styles.highlight}>
+                      <Badge
+                        shape="rounded"
+                        color="informative"
+                        className={styles.highlight}
+                      >
                         acquireTokenSilent()
-                      </Body1>
+                      </Badge>
                     </Body1>
                   </li>
                   <li>
                     <Body1>
                       <Body1Strong>环境适配</Body1Strong>: Teams 环境使用
-                      <Body1 className={styles.highlight}>loginPopup()</Body1>
+                      <Badge
+                        shape="rounded"
+                        color="informative"
+                        className={styles.highlight}
+                      >
+                        loginPopup()
+                      </Badge>
                       ，浏览器使用
-                      <Body1 className={styles.highlight}>
+                      <Badge
+                        shape="rounded"
+                        color="informative"
+                        className={styles.highlight}
+                      >
                         loginRedirect()
-                      </Body1>
-                      (当然也可以用loginPopup，这里只是为了演示redirect)
+                      </Badge>
+                      (当然也可以用 loginPopup，这里只是为了演示 redirect)
                     </Body1>
                   </li>
                   <li>
@@ -613,50 +698,109 @@ export async function initializeTeamsSDK(): Promise<void> {
                       </Link>
                     </Body1>
                   </li>
+                  <li>
+                    <Body1>
+                      本示例<Body1Strong>非最佳实践</Body1Strong>
+                      ，仅为演示目的将认证代码集中在一个模块中，请按需构建代码结构。
+                    </Body1>
+                  </li>
                 </ul>
               </div>
 
-              <Body1>
-                更多 MSAL.js 最佳实践:App Manifest
-                <Link
-                  href="https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-browser/docs/acquire-token.md"
-                  target="_blank"
-                >
-                  MSAL.js Token获取文档
-                </Link>
+              <Body1Strong>🎉 完成改造！</Body1Strong>
+              <Body1 className={styles.paragraph}>
+                是不是发现 NAA 获取Token方式和常规 MSAL OAuth 没什么区别呢？
+                这就对了，NAA 正是依靠 Teams 作为 Host 代理获得 API 的 access
+                token，让 SPA 应用使用统一的 MSAL.js 代码获取 token
+              </Body1>
+              <Body1 className={styles.paragraph}>
+                按照以上步骤，你的网站就能
+                <Body1Strong>同时支持 Web 和 Teams NAA</Body1Strong>了。
+                接着只需使用 Access Token 调用 Graph 或其他 API 即可
               </Body1>
             </Card>
           </AccordionPanel>
         </AccordionItem>
       </Accordion>
 
-      <div className={styles.stepCard}>
-        <Text>
-          <strong>🎉 完成改造！</strong>
-          <br />
-          按照以上步骤，你的普通 AAD 保护网站就能完美支持 Teams NAA 了。 用户在
-          Teams 中使用你的应用时将享受到无缝的单点登录体验，
-          而在浏览器中访问时仍然保持原有的认证流程。
-        </Text>
-
-        <Text>
-          想了解更多技术细节？查看App Manifest
-          <Link
-            href="https://github.com/AzureAD/microsoft-authentication-library-for-js"
-            target="_blank"
-          >
-            MSAL.js GitHub
-          </Link>
-          App Manifest 和App Manifest
-          <Link
-            href="https://github.com/OfficeDev/microsoft-teams-library-js"
-            target="_blank"
-          >
-            Teams SDK GitHub
-          </Link>
-          App Manifest 了解底层实现原理。
-        </Text>
-      </div>
+      <Subtitle1 as="h3">参考资源</Subtitle1>
+      <Body2 as="p" className={styles.paragraph}>
+        以下是相关的官方文档和资源，可以帮助您深入了解 Teams Tab 开发、NAA
+        认证、MSAL.js 库和相关技术：
+      </Body2>
+      <ul className={styles.noIndentList}>
+        <li>
+          <Body2>
+            <Link
+              href="https://learn.microsoft.com/en-us/microsoftteams/platform/tabs/what-are-tabs"
+              target="_blank"
+            >
+              Microsoft Teams Tabs 基本概念、类型和应用场景
+            </Link>
+          </Body2>
+        </li>
+        <li>
+          <Body2>
+            <Link
+              href="https://learn.microsoft.com/en-us/microsoftteams/platform/concepts/authentication/nested-authentication"
+              target="_blank"
+            >
+              Teams NAA (Nested App Authentication)
+              认证协议的完整介绍、配置方法和最佳实践
+            </Link>
+          </Body2>
+        </li>
+        <li>
+          <Body2>
+            <Link
+              href="https://learn.microsoft.com/en-us/entra/msal/javascript/browser/about-msal-browser"
+              target="_blank"
+            >
+              MSAL.js Browser 文档
+            </Link>
+          </Body2>
+        </li>
+        <li>
+          <Body2>
+            <Link
+              href="https://learn.microsoft.com/en-us/javascript/api/%40microsoft/teams-js/?view=msteams-client-js-latest"
+              target="_blank"
+            >
+              Teams JavaScript SDK API 参考
+            </Link>
+          </Body2>
+        </li>
+        <li>
+          <Body2>
+            <Link
+              href="https://react.fluentui.dev/?path=/docs/concepts-introduction--docs"
+              target="_blank"
+            >
+              Microsoft Fluent UI 设计系统的 React 组件库文档
+            </Link>
+          </Body2>
+        </li>
+        <li>
+          <Body2>
+            <Link
+              href="https://github.com/AzureAD/microsoft-authentication-library-for-js"
+              target="_blank"
+            >
+              MSAL.js GitHub Repo
+            </Link>
+          </Body2>
+        </li>
+        <li>
+          <Body2>
+            <Link
+              href="https://github.com/OfficeDev/microsoft-teams-library-js"
+              target="_blank"
+            >
+              Teams SDK GitHub Repo
+            </Link>
+          </Body2>
+        </li>
+      </ul>
     </div>
   );
 };

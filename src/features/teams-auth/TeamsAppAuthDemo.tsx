@@ -5,6 +5,7 @@ import {
   tokens,
   Spinner,
   Title1,
+  Subtitle1,
 } from "@fluentui/react-components";
 import ProfileData from "./ProfileData";
 import NAAIntroduction from "./NAAIntroduction";
@@ -71,7 +72,7 @@ const TeamsAppAuthDemo: React.FC = () => {
       </Title1>
 
       <NAAIntroduction />
-
+      <Subtitle1 as="h3">Graph API 调用演示</Subtitle1>
       {loading ? (
         <div className={styles.loading}>
           <Spinner size="large" />
