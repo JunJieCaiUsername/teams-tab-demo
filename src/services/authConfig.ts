@@ -1,4 +1,5 @@
 import type { Configuration } from "@azure/msal-browser";
+import { LogLevel } from "@azure/msal-browser";
 
 // NAA (Nested App Authentication) configuration for Teams
 // supportsNestedAppAuth is not required if using createNestablePublicClientApplication
@@ -11,6 +12,28 @@ const msalConfig: Configuration = {
   cache: {
     cacheLocation: "sessionStorage", // Configures cache location
     storeAuthStateInCookie: false, // Set this to "true" if you are having issues on IE11 or Edge
+  },
+  system: {
+    loggerOptions: {
+      logLevel: LogLevel.Verbose,
+      loggerCallback: (level, message) => {
+        switch (level) {
+          case LogLevel.Error:
+            console.error(message);
+            return;
+          case LogLevel.Info:
+            console.info(message);
+            return;
+          case LogLevel.Verbose:
+            console.debug(message);
+            return;
+          case LogLevel.Warning:
+            console.warn(message);
+            return;
+        }
+      },
+      piiLoggingEnabled: true,
+    },
   },
 };
 
